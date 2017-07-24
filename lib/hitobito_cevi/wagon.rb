@@ -27,6 +27,7 @@ module HitobitoCevi
 
       Event::Kind.send :include, Cevi::Event::Kind
       Event::Course.send :include, Cevi::Event::Course
+      Event::Role::AssistantLeader.permissions = [:participations_read]
 
       # :financials may edit all people in a Group::Spender group.
       # :unconfined_below may edit below people even when they have visible_from_above = false.
@@ -34,9 +35,10 @@ module HitobitoCevi
       Role::Permissions << :financials << :unconfined_below
 
       # abilities
+      EventAbility.send :include, Cevi::EventAbility
+      GroupAbility.send :include, Cevi::GroupAbility
       PersonAbility.send :include, Cevi::PersonAbility
       RoleAbility.send :include, Cevi::RoleAbility
-      GroupAbility.send :include, Cevi::GroupAbility
       VariousAbility.send :include, Cevi::VariousAbility
       Event::ParticipationAbility.send :include, Cevi::Event::ParticipationAbility
       PersonReadables.send :include, Cevi::PersonReadables
@@ -44,6 +46,11 @@ module HitobitoCevi
       AbilityDsl::Base.send :include, Cevi::AbilityDsl::Base
 
       # domain
+      Event::ParticipationFilter.load_entries_includes.each do |incl|
+        if incl.is_a?(Hash) && incl.key?(:person)
+          incl[:person] << :ortsgruppe
+        end
+      end
       Export::Tabular::People::PersonRow.send :include, Cevi::Export::Tabular::People::PersonRow
       Export::Tabular::People::PeopleAddress.send(
         :include, Cevi::Export::Tabular::People::PeopleAddress)

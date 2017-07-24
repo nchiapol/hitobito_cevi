@@ -11,6 +11,13 @@ module Cevi
       extend ActiveSupport::Concern
 
       included do
+        sort_mappings_with_indifferent_access['ortsgruppe'] =
+          if ::Event.connection.adapter_name.downcase =~ /mysql/
+            'CONCAT_WS("", groups.short_name, groups.name)'
+          else
+            '(IFNULL(groups.short_name, "") || groups.name)'
+          end
+
         alias_method_chain :assign_attributes, :check
         alias_method_chain :tabular_exporter, :check
       end
