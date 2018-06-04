@@ -816,7 +816,7 @@ de:
           ev: Evangelisch-reformiert
           rk: Römisch-katholisch
           ck: Christkatholisch
-          none: Konfessionlos
+          none: Konfessionslos
           other: Andere
           _nil: unbekannt
 
@@ -828,7 +828,7 @@ de:
         nationality: Nationalität
         nickname: Ceviname
         old_data: Alte Daten
-        profession: Beruf
+        profession: Beruf/Klasse
         salutation: Anrede
         salutations:
           formal: Sie
